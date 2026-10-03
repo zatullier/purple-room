@@ -1,0 +1,47 @@
+{
+  "source": "blender/Purple_Room.blend",
+  "sourceSha256": "a8151993c51ad155ca5f06a8c1f429756f783308ce43695b4103929b5aca13bc",
+  "exporterSha256": "e0f1621a35140ed86d84e750c3d0462cc09de5ced474c8b0bc5fe643de97e613",
+  "blenderVersion": "5.2.2 LTS",
+  "camera": "Camera - photograph match",
+  "width": 1824,
+  "height": 1368,
+  "room": "assets/room.jpg",
+  "detail": "assets/fridge.jpg",
+  "fridge": {
+    "object": "Refrigerator body",
+    "polygon": [
+      [
+        0.3638464,
+        0.4736819
+      ],
+      [
+        0.4655926,
+        0.4727188
+      ],
+      [
+        0.4647726,
+        0.2989181
+      ],
+      [
+        0.3605651,
+        0.2979331
+      ]
+    ],
+    "bounds": [
+      0.3605651,
+      0.2979331,
+      0.1050275,
+      0.17574879999999998
+    ],
+    "center": [
+      0.41307885,
+      0.38580749999999997
+    ],
+    "zoom": 3.25
+  },
+  "assetSha256": {
+    "room.jpg": "ae7075ca9b1069456ff28bb87cab8ceba64f17851798f575da0d64c3672e9bd8",
+    "fridge.jpg": "4a2eaae6764f6dce3505328e9975059a6bec03efeafd6e9758ce9e994ddd0af3"
+  }
+}

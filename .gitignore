@@ -1,0 +1,7 @@
+_site/
+*.blend1
+*.blend2
+__pycache__/
+*.log
+qa/
+scripts/github_setup.py
