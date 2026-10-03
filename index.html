@@ -15,8 +15,10 @@
   <main class="room" id="room" aria-label="Interactive Blender room">
     <div class="ambient" aria-hidden="true"></div>
     <div class="scene" id="scene" data-view="room">
-      <img class="room-image" id="room-image" src="./assets/room.jpg" width="1824" height="1368" alt="A purple-lit room with a pink playpen, marble breakfast bar, hanging lamp, and a silver fridge in the kitchen." draggable="false" fetchpriority="high">
-      <img class="detail-image" id="detail-image" width="1824" height="1368" alt="Close-up of the silver fridge, including the magnets and handwritten note on its doors." draggable="false" aria-hidden="true">
+      <img class="room-image" id="room-image" src="./assets/room.jpg" width="1280" height="960" alt="A purple-lit room with a pink playpen, marble breakfast bar, hanging lamp, and a silver fridge in the kitchen." draggable="false" fetchpriority="high">
+      <img class="detail-image" id="detail-image" width="1280" height="960" alt="Close-up of the silver fridge, including the magnets and handwritten note on its doors." draggable="false" hidden>
+      <video class="camera-animation" id="approach" muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" hidden></video>
+      <video class="camera-animation" id="return" muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" hidden></video>
       <button class="fridge-target" id="fridge" aria-label="Zoom in on the fridge" aria-describedby="hint" disabled>
         <span class="fridge-outline" aria-hidden="true"></span>
       </button>

@@ -5,3 +5,4 @@ __pycache__/
 *.log
 qa/
 scripts/github_setup.py
+.render-cache/

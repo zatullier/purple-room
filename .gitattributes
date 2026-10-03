@@ -7,3 +7,4 @@
 *.yml text eol=lf
 *.blend binary
 *.jpg binary
+*.mp4 binary

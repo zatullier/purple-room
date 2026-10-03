@@ -1,35 +1,51 @@
 # The Purple Room
 
-A GitHub Pages website built from `blender/Purple_Room.blend`. The room is the entire page. Click or tap the fridge to zoom in; Back to room or Escape reverses the zoom. Keyboard users can Tab to the fridge and press Enter. Reduced-motion preferences are respected.
+[Open the website](https://zatullier.github.io/purple-room/)
 
-The website uses **Blender-rendered views**, preserving the scene's Cycles lighting, materials, and translucent mesh. It does not run a live 3D renderer in the browser. A smooth image-space camera zoom transitions to a sharper Blender render of exactly the same view.
+Click the fridge to play a camera approach authored and rendered in **Blender**. The camera physically moves through the scene, with a small lens change and an animated focus target. Back to room plays a Blender-encoded return clip. The browser performs no image scaling, camera interpolation, or CSS zoom.
 
-## Blender is the source
+## Edit the animation in Blender
 
-`scripts/export_scene.py` loads the active camera and the `Refrigerator body` object from the .blend. It projects that object's visible bounds into the image, renders both views, and writes `assets/scene.json`. No fridge coordinates are hand-positioned in the website.
+Open `blender/Purple_Room.blend` in Blender 5.2 or newer. It opens in the **Animation** workspace. Press Space to preview, or scrub the timeline:
 
-`scripts/build.py` verifies SHA-256 hashes of the .blend, exporter, and images before publishing. Editing the Blender file without regenerating the website images fails the build instead of publishing stale renders. All textures are packed in the .blend.
+- Frame 1: the original room view.
+- Frame 36: the approach.
+- Frame 72: the fridge close-up.
 
-After editing the Blender scene, export again:
+The active camera has location and focal-length keyframes in its object and camera-data action slots. `Fridge camera focus` in collection **10 Fridge camera animation** is the animated look-at target. These channels use native Bezier keyframes with clamped handles. Edit the keyframes to change the move; the scene's frame range, frame rate, resolution, and Cycles settings control the export. The default is 72 frames at 24 fps, 1280 × 960.
+
+The fridge object and foreground occluder are selected by the scene's `web_hotspot_object` and `web_occluder_object` custom properties. Their geometry and the home camera determine the clickable area. Textures are packed in the source file.
+
+## Export: all image and animation work happens inside Blender
+
+From this repository's directory:
 
 ```powershell
 & 'C:\Users\zacha\AppData\Local\Programs\Blender\5.2\blender.exe' --background blender/Purple_Room.blend --python scripts/export_scene.py
 python scripts/build.py
 ```
 
-On another machine, substitute its Blender executable. Blender 5.2 or newer is required for this source file. Rendering uses CUDA when available and otherwise CPU. Exporting never saves changes to the source .blend.
+Substitute your Blender executable on another machine. The exporter:
 
-## Preview
+1. Evaluates the saved Blender camera action for every frame.
+2. Renders the sequence with Cycles, using CUDA when available and CPU otherwise.
+3. Uses **Blender's Video Sequencer** to encode H.264 MP4 approach and return clips. The return clip reverses the rendered frame sequence inside Blender.
+4. Exports matching endpoint JPEGs and projects the fridge's click area from scene geometry.
+5. Records the source hash, asset hashes, evaluated camera poses, and animation settings in `assets/scene.json`.
+
+Renders resume from `.render-cache/<source hash>/`. An editable `Video_Sequencer.blend` is saved beside the cached PNG frames. These large intermediate files remain local and can be regenerated. The canonical `blender/Purple_Room.blend` is never modified by exporting.
+
+`scripts/animate_scene.py` is the original camera-authoring script. Run it only to recreate the initial animation; it replaces the camera's existing actions. Normal edits require only the export command above. `scripts/preview_animation.py` renders three quick camera checkpoints without modifying the source.
+
+## Website and publishing
+
+The website only handles clicks, keyboard input, and native video playback. Reduced-motion users receive an immediate switch between Blender's endpoint renders. Escape returns to the room, or cancels a move already in progress. Playback failures are reported instead of substituting a CSS zoom.
 
 ```sh
 python scripts/build.py
 python -m http.server 4173 --directory _site
 ```
 
-Open http://localhost:4173. There are no npm packages, external fonts, trackers, or third-party runtime services.
+Open http://localhost:4173 to preview. There are no npm packages, external fonts, trackers, or third-party runtime services.
 
-## GitHub Pages
-
-Push to `main`. In repository **Settings → Pages**, select **GitHub Actions** as the source. The included workflow verifies the Blender dependencies and publishes `_site` using the [official GitHub Pages workflow](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
-
-The .blend and build scripts stay in the repository; only the website and rendered assets are deployed to Pages.
+The build verifies the .blend, exporter, images, and clips against their hashes. Changing the Blender file without exporting again fails the build, preventing stale animation from being published. Push the updated .blend and generated assets to `main` to deploy through GitHub Actions and GitHub Pages. Only web files are deployed; the .blend and scripts remain in the repository.
